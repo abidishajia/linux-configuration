@@ -2,27 +2,25 @@
 
 ## About
 
-This tutorial will guide you through the steps to take a baseline installation of a Linux server and prepare it to host your Web applications. It is made for python2.7
-
-In this project, I have set up an Ubuntu 18.04 image on a DigitalOcean droplet. The technical details of the server as well as the steps that have been taken to set it up can be found in the succeeding sections.
+This tutorial will guide you through the steps to take a baseline installation of a Linux server and prepare it to host your Web applications.In this project, I have set up an Ubuntu 18.04 image on a DigitalOcean droplet.
 
 ### Technical Information About the Project
 
-- **Server IP Address:** 159.65.151.202
-- **Server Alias:** 159.65.151.202.xip.io
+- **Server IP Address:** http://104.248.78.149
+- **Server Alias:** http://104.248.78.149.xip.io
 - **SSH server access port:** 2200
 - **SSH login username:** grader
-- **Application URL:** http://159.65.151.202.xip.io
+- **Application URL:** http://104.248.78.149.xip.io
 
 ## Steps to Set up the Server
 
 ### 1. Creating the RSA Key Pair
 
-On your local machine, you will first have to set up the public and private key pair. This key pair will be used to authenticate yourself while securely logging in to the server via SSH. The private key will be kept with you in your local machine, and the public key will be stored in the server.
+On your local machine, you will first have to set up the public and private key pair.
 
 To generate a key pair, run the following command:
 
-   ```console
+   ```
    $ ssh-keygen
    ```
 
@@ -32,16 +30,14 @@ The whole process would look like this:
 
 ```
 Generating public/private rsa key pair.
-Enter file in which to save the key (/c/Users/GANAVI-PC/.ssh/id_rsa): udacity_keys
+Enter file in which to save the key (/c/Users/GANAVI-PC/.ssh/id_rsa): final_key
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
-Your identification has been saved in udacity_keys.
-Your public key has been saved in udacity.pub.
-The key fingerprint is:
-SHA256:GgXdnbdJ7h6vfYt0Q9OmhfQN1R7oL8Axu+cn1TSmwgk 
+Your identification has been saved in final_key.
+Your public key has been saved in final_key.
 ```
 
-You now have a public and private key that you can use to authenticate. The public key is called `udacity_keys.pub` and the corresponding private key is called `udacity_keys`. The key pair is stored inside the `~/.ssh/` directory.
+You now have a public and private key that you can use to authenticate. The public key is called `final_key.pub` and the corresponding private key is called `final_key`. The key pair is stored inside the `~/.ssh/` directory.
 
 ### 2. Setting Up a DigitalOcean Droplet
 
@@ -53,7 +49,7 @@ You now have a public and private key that you can use to authenticate. The publ
 
 4. Choose a preferred size. In this project, I have chosen the **1GB/1 vCPU/25GB** configuration.
 
-5. In the section **Add Your SSH Keys**, paste the content of your public key, `udacity.pub`:
+5. In the section **Add Your SSH Keys**, paste the content of your public key, `final_key.pub`:
 
    This step will automatically create the file `~/.ssh/authorized_keys` with appropriate permissions and add your public key to it. It would also add the following rule in the `/etc/ssh/sshd_config` file automatically:
 
@@ -72,13 +68,13 @@ You now have a public and private key that you can use to authenticate. The publ
 As the droplet has been successfully created, you can now log into the server as `root` user by running the following command in your host machine:
 
 ```
-  $ ssh root@159.65.151.202
+  $ ssh -i /Users/mithu/.ssh/final_key root@http://104.248.78.149
 ```
 
 This will look for the private key in your local machine and log you in automatically if the corresponding public key is found on your server. After you are logged in, you might see something similar to this:
 
 ```
-$ ssh root@159.65.151.202
+$ ssh -i /Users/mithu/.ssh/final_key root@http://104.248.78.149
 Welcome to Ubuntu 18.04 LTS (GNU/Linux 4.15.0-29-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
@@ -140,7 +136,7 @@ This will update all the packages. If the available update is a kernel update, y
    This will take you back to your host machine. After you are back to your local machine, run:
 
    ```
-   $ ssh root@159.65.151.202 -p 2200
+   $ ssh root@104.248.78.149 -p 2200
    ```
 
    You should now be able to log in to the server as `root` on port 2200. The `-p` option explicitly tells at what port the SSH server operates on. It now no more operates on port number 22.
@@ -151,16 +147,6 @@ To configure the timezone to use UTC, run the following command:
 
 ```
 # dpkg-reconfigure tzdata
-```
-
-It then shows you a list. Choose ``None of the Above`` and press enter. In the next step, choose ``UTC`` and press enter.
-
-You should now see an output like this:
-
-```
-Current default time zone: 'Etc/UTC'
-Local time is now:      Thu May 24 11:04:59 UTC 2018.
-Universal Time is now:  Thu May 24 11:04:59 UTC 2018.
 ```
 
 ### 6. Creating the User `grader` and Adding it to the `sudo` Group
@@ -233,7 +219,7 @@ $ touch .ssh/authorized_keys
 $ nano .ssh/authorized_keys
 ```
 
-After you have run all the above commands, go back to your local machine and copy the content of the public key file `~/.ssh/udacity_keys.pub`. Paste the public key to the server's `authorized_keys` file using `nano` or any other text editor, and save.
+After you have run all the above commands, go back to your local machine and copy the content of the public key file `~/.ssh/final_key.pub`. Paste the public key to the server's `authorized_keys` file using `nano` or any other text editor, and save.
 
 ```
 $ chmod 644 authorized_keys
@@ -243,7 +229,7 @@ Run the Above command to restrict the access for other users.
 After that, run `exit`. You would now be back to your local machine. To confirm that it worked, run the following command in your local machine:
 
 ```console
-$ ssh grader@159.65.151.202 -p 2200
+$ ssh grader@104.248.78.149 -p 2200
 ```
 
 You should now be able to log in as `grader` and would get a prompt to enter commands.
@@ -255,7 +241,7 @@ Next, run `exit` to go back to the host machine and proceed to the following ste
 
 1. Run the following command on your local machine to log in as `root` in the server:
    ```
-   $ ssh root@159.65.151.202 -p 2200
+   $ ssh root@104.248.78.149 -p 2200
    ```
 
 2. After you are logged in, open the file `/etc/ssh/sshd_config` with `nano`:
@@ -278,7 +264,7 @@ Next, run `exit` to go back to the host machine and proceed to the following ste
 6. After you are back to the host machine, when you try to log in as `root`, you should get an error:
 
    ```console
-   $ ssh root@159.65.151.202 -p 2200
+   $ ssh root@104.248.78.149 -p 2200
    root@159.65.151.202: Permission denied (publickey).
    ```
 
@@ -287,7 +273,7 @@ Next, run `exit` to go back to the host machine and proceed to the following ste
 Now we would configure the firewall to allow only incoming connections for SSH (port 2200), HTTP (port 80), and NTP (port 123) in grader:
 
 ```
-$ ssh grader@159.65.151.202 -p 2200
+$ ssh grader@104.248.78.149 -p 2200
 # sudo ufw allow 2200/tcp
 # sudo ufw allow 80/tcp
 # sudo ufw allow 123/udp
@@ -382,12 +368,12 @@ Add the following content:
    WSGIDaemonProcess catalog python-path=/var/www/catalog:/var/www/catalog/venv/lib/python2.7/site-packages
    WSGIProcessGroup catalog
    WSGIScriptAlias / /var/www/catalog/catalog.wsgi
-   <Directory /var/www/catalog/catalog/>
+   <Directory /var/www/catalog/chatBoard/>
        Order allow,deny
        Allow from all
    </Directory>
-   Alias /static /var/www/catalog/catalog/static
-   <Directory /var/www/catalog/catalog/static/>
+   Alias /static /var/www/catalog/chatBoard/static
+   <Directory /var/www/catalog/chatBoard/static/>
        Order allow,deny
        Allow from all
    </Directory>
@@ -415,7 +401,7 @@ import logging
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, "/var/www/catalog/")
 
-from catalog import app as application
+from chatBoard import app as application
 application.secret_key = 'secret'
 ```
 
@@ -469,7 +455,7 @@ host    all             all             ::1/128                 md5
    $ sudo service apache2 restart
    ```
 
-   Now you should be able to run the application at <http://159.65.151.202.xip.io/>.
+   Now you should be able to run the application at <http://104.248.78.149.xip.io/>.
 
 ### 14 Final updates on Google Login to make the app run on DigitalOcean:
 
@@ -481,8 +467,8 @@ To get the Google login working there are a few additional steps:
 4. Select Create Crendentials > OAuth Client ID
 5. Select Web application
 6. Enter name 'Item-Catalog'
-7. Authorized JavaScript origins = 'http://159.65.151.202.xip.io'
-8. Authorized redirect URIs = 'http://159.65.151.202.xip.io/login' && 'http://159.65.151.202.xip.io/gconnect'
+7. Authorized JavaScript origins = 'http://104.248.78.149.xip.io'
+8. Authorized redirect URIs = 'http://104.248.78.149.xip.io/login' && 'http://104.248.78.149.xip.io/gconnect'
 9. Select Create
 10. Copy the Client ID and paste it into the data-clientid in login.html
 11. On the Dev Console Select Download JSON
